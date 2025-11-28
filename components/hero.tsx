@@ -5,7 +5,7 @@ import { useHeroStore } from "@/lib/store/hero-store";
 import { ArrowRight, Terminal } from "lucide-react";
 import * as motion from "motion/react-client";
 import Link from "next/link";
-import { useEffect } from "react";
+
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
@@ -49,6 +49,23 @@ function HeroBackground() {
 
 // VS Code Mockup - Flat 2D Design
 function VSCodeMockup() {
+  const codeContainer = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.8, delayChildren: 1.0 },
+    },
+  };
+
+  const codeLine = {
+    hidden: { width: 0, opacity: 0 },
+    visible: {
+      width: "100%",
+      opacity: 1,
+      transition: { duration: 0.8, ease: "linear" as const },
+    },
+  };
+
   return (
     <div className="w-full h-full bg-[#1e1e1e] rounded-xl border-2 border-gray-800 shadow-[12px_12px_0px_0px_rgba(0,0,0,0.2)] overflow-hidden font-mono text-sm flex flex-col">
       {/* Title Bar */}
@@ -66,30 +83,52 @@ function VSCodeMockup() {
 
       {/* Code Content */}
       <div className="p-6 flex-1 overflow-auto">
-        <div className="text-gray-300 space-y-2">
-          <div>
+        <motion.div
+          className="text-gray-300 space-y-2"
+          variants={codeContainer}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div
+            variants={codeLine}
+            className="overflow-hidden whitespace-nowrap"
+          >
             <span className="text-purple-400">const</span>{" "}
             <span className="text-blue-400">developer</span> = {"{"}
-          </div>
-          <div className="pl-4">
+          </motion.div>
+          <motion.div
+            variants={codeLine}
+            className="pl-4 overflow-hidden whitespace-nowrap"
+          >
             <span className="text-blue-300">name</span>:{" "}
             <span className="text-green-400">&quot;Bruno&quot;</span>,
-          </div>
-          <div className="pl-4">
+          </motion.div>
+          <motion.div
+            variants={codeLine}
+            className="pl-4 overflow-hidden whitespace-nowrap"
+          >
             <span className="text-blue-300">role</span>:{" "}
             <span className="text-green-400">
               &quot;Full-Stack Developer&quot;
             </span>
             ,
-          </div>
-          <div className="pl-4">
+          </motion.div>
+          <motion.div
+            variants={codeLine}
+            className="pl-4 overflow-hidden whitespace-nowrap"
+          >
             <span className="text-blue-300">skills</span>: [
             <span className="text-green-400">&quot;React&quot;</span>,{" "}
             <span className="text-green-400">&quot;Next.js&quot;</span>,{" "}
             <span className="text-green-400">&quot;TypeScript&quot;</span>]
-          </div>
-          <div>{"}"}</div>
-        </div>
+          </motion.div>
+          <motion.div
+            variants={codeLine}
+            className="overflow-hidden whitespace-nowrap"
+          >
+            {"}"}
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
@@ -97,14 +136,6 @@ function VSCodeMockup() {
 
 export function Hero() {
   const { line1, line2, line3 } = useHeroStore();
-
-  useEffect(() => {
-    useHeroStore.setState({
-      line1: "Olá, eu sou Bruno",
-      line2: "Desenvolvedor Full-Stack",
-      line3: "Transformando ideias em realidade",
-    });
-  }, []);
 
   return (
     <>
@@ -120,20 +151,30 @@ export function Hero() {
               transition={{ duration: 0.8 }}
             >
               <div className="space-y-6">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
                   <motion.span
                     className="block"
                     variants={container}
                     initial="hidden"
                     animate="visible"
                   >
-                    {line1.split("").map((char, index) => (
+                    {line1.split(" ").map((word, i) => (
                       <motion.span
-                        key={generateCharId(char, index, 1)}
-                        variants={child}
-                        style={{ display: "inline-block" }}
+                        key={i}
+                        variants={{
+                          visible: { transition: { staggerChildren: 0.02 } },
+                        }}
+                        className="inline-block whitespace-nowrap mr-[0.25em]"
                       >
-                        {char === " " ? "\u00A0" : char}
+                        {word.split("").map((char, j) => (
+                          <motion.span
+                            key={generateCharId(char, i * 100 + j, 1)}
+                            variants={child}
+                            style={{ display: "inline-block" }}
+                          >
+                            {char}
+                          </motion.span>
+                        ))}
                       </motion.span>
                     ))}
                   </motion.span>
@@ -143,13 +184,23 @@ export function Hero() {
                     initial="hidden"
                     animate="visible"
                   >
-                    {line2.split("").map((char, index) => (
+                    {line2.split(" ").map((word, i) => (
                       <motion.span
-                        key={generateCharId(char, index, 2)}
-                        variants={child}
-                        style={{ display: "inline-block" }}
+                        key={i}
+                        variants={{
+                          visible: { transition: { staggerChildren: 0.02 } },
+                        }}
+                        className="inline-block whitespace-nowrap mr-[0.25em]"
                       >
-                        {char === " " ? "\u00A0" : char}
+                        {word.split("").map((char, j) => (
+                          <motion.span
+                            key={generateCharId(char, i * 100 + j, 2)}
+                            variants={child}
+                            style={{ display: "inline-block" }}
+                          >
+                            {char}
+                          </motion.span>
+                        ))}
                       </motion.span>
                     ))}
                   </motion.span>
@@ -159,25 +210,35 @@ export function Hero() {
                     initial="hidden"
                     animate="visible"
                   >
-                    {line3.split("").map((char, index) => (
+                    {line3.split(" ").map((word, i) => (
                       <motion.span
-                        key={generateCharId(char, index, 3)}
-                        variants={child}
-                        style={{ display: "inline-block" }}
+                        key={i}
+                        variants={{
+                          visible: { transition: { staggerChildren: 0.02 } },
+                        }}
+                        className="inline-block whitespace-nowrap mr-[0.25em]"
                       >
-                        {char === " " ? "\u00A0" : char}
+                        {word.split("").map((char, j) => (
+                          <motion.span
+                            key={generateCharId(char, i * 100 + j, 3)}
+                            variants={child}
+                            style={{ display: "inline-block" }}
+                          >
+                            {char}
+                          </motion.span>
+                        ))}
                       </motion.span>
                     ))}
                   </motion.span>
                 </h1>
                 <motion.p
-                  className="max-w-[600px] mx-auto lg:mx-0 text-muted-foreground text-xl md:text-2xl leading-relaxed font-medium"
+                  className="max-w-[600px] mx-auto lg:mx-0 text-muted-foreground text-lg md:text-xl leading-relaxed"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.2, duration: 0.5 }}
                 >
-                  Desenvolvedor Full-Stack focado em criar soluções web de alta
-                  performance que impulsionam o seu negócio.
+                  Criando experiências web modernas e de alta performance para
+                  impulsionar o seu negócio.
                 </motion.p>
               </div>
               <motion.div

@@ -11,7 +11,7 @@ interface HeroState {
 export const useHeroStore = create<HeroState>((set) => ({
   mounted: false,
   setMounted: (mounted) => set({ mounted }),
-  line1: "",
-  line2: "",
-  line3: "",
+  line1: "Olá, eu sou Bruno",
+  line2: "Desenvolvedor Full-Stack",
+  line3: "Transformando ideias em realidade",
 }));
