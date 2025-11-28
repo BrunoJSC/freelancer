@@ -6,7 +6,6 @@ import { ArrowRight, Terminal } from "lucide-react";
 import * as motion from "motion/react-client";
 import Link from "next/link";
 import { useEffect } from "react";
-import { TypeAnimation } from "react-type-animation";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
@@ -66,6 +65,73 @@ function VSCodeMockup() {
       </div>
 
       {/* Code Content */}
+      <div className="p-6 flex-1 overflow-auto">
+        <div className="text-gray-300 space-y-2">
+          <div>
+            <span className="text-purple-400">const</span>{" "}
+            <span className="text-blue-400">developer</span> = {"{"}
+          </div>
+          <div className="pl-4">
+            <span className="text-blue-300">name</span>:{" "}
+            <span className="text-green-400">&quot;Bruno&quot;</span>,
+          </div>
+          <div className="pl-4">
+            <span className="text-blue-300">role</span>:{" "}
+            <span className="text-green-400">
+              &quot;Full-Stack Developer&quot;
+            </span>
+            ,
+          </div>
+          <div className="pl-4">
+            <span className="text-blue-300">skills</span>: [
+            <span className="text-green-400">&quot;React&quot;</span>,{" "}
+            <span className="text-green-400">&quot;Next.js&quot;</span>,{" "}
+            <span className="text-green-400">&quot;TypeScript&quot;</span>]
+          </div>
+          <div>{"}"}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Hero() {
+  const { line1, line2, line3 } = useHeroStore();
+
+  useEffect(() => {
+    useHeroStore.setState({
+      line1: "Olá, eu sou Bruno",
+      line2: "Desenvolvedor Full-Stack",
+      line3: "Transformando ideias em realidade",
+    });
+  }, []);
+
+  return (
+    <>
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <HeroBackground />
+        <div className="container mx-auto px-4 py-20 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left side - Text content */}
+            <motion.div
+              className="space-y-8 text-center lg:text-left"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="space-y-6">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                  <motion.span
+                    className="block"
+                    variants={container}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    {line1.split("").map((char, index) => (
+                      <motion.span
+                        key={generateCharId(char, index, 1)}
+                        variants={child}
+                        style={{ display: "inline-block" }}
                       >
                         {char === " " ? "\u00A0" : char}
                       </motion.span>
