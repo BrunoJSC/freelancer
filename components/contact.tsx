@@ -1,5 +1,9 @@
+"use client";
+
 import { Mail, MapPin } from "lucide-react";
 import * as motion from "motion/react-client";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -12,6 +16,55 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
 export function Contact() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: "",
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erro ao enviar mensagem");
+      }
+
+      toast.success(
+        "Mensagem enviada com sucesso! Entrarei em contato em breve."
+      );
+      setFormData({ firstName: "", lastName: "", email: "", message: "" });
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Erro ao enviar mensagem"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   return (
     <section
       id="contact"
@@ -104,17 +157,27 @@ export function Contact() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Input
+                        name="firstName"
                         placeholder="Nome"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        required
+                        disabled={isLoading}
                         className="border border-black dark:border-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-300"
                       />
                     </div>
                     <div className="space-y-2">
                       <Input
+                        name="lastName"
                         placeholder="Sobrenome"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        required
+                        disabled={isLoading}
                         className="border border-black dark:border-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-300"
                       />
                     </div>
@@ -122,18 +185,28 @@ export function Contact() {
                   <div className="space-y-2">
                     <Input
                       type="email"
+                      name="email"
                       placeholder="Email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      disabled={isLoading}
                       className="border border-black dark:border-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-300"
                     />
                   </div>
                   <div className="space-y-2">
                     <Textarea
+                      name="message"
                       placeholder="Sua Mensagem"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      disabled={isLoading}
                       className="min-h-[120px] border border-black dark:border-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all duration-300"
                     />
                   </div>
-                  <Button type="submit" className="w-full">
-                    Enviar Mensagem
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Enviando..." : "Enviar Mensagem"}
                   </Button>
                 </form>
               </CardContent>

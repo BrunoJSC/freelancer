@@ -1,10 +1,11 @@
 "use client";
 
 import { generateCharId } from "@/lib/constants";
+import { useHeroStore } from "@/lib/store/hero-store";
 import { ArrowRight } from "lucide-react";
 import * as motion from "motion/react-client";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import {
   SiNextdotjs,
   SiNodedotjs,
@@ -298,11 +299,16 @@ export function Hero() {
   const line2 = "Ideias em";
   const line3 = "Realidade";
 
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHeroStore((state) => state.mounted);
+  const setMounted = useHeroStore((state) => state.setMounted);
 
+  // This useEffect is correct: it synchronizes React's component lifecycle
+  // (an external system) with our Zustand store. The cleanup ensures proper
+  // state management when component unmounts.
   useEffect(() => {
     setMounted(true);
-  }, []);
+    return () => setMounted(false);
+  }, [setMounted]);
 
   return (
     <>
