@@ -95,7 +95,7 @@ function VSCodeMockup() {
   );
 }
 
-export default function Hero() {
+export function Hero() {
   const { line1, line2, line3 } = useHeroStore();
 
   useEffect(() => {
