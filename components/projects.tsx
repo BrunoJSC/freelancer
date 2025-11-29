@@ -1,4 +1,4 @@
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import * as motion from "motion/react-client";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
@@ -20,16 +20,14 @@ const projects = [
     tags: ["Vite", "React", "TypeScript", "TailwindCSS"],
     demoUrl: "https://www.hegemon.com.br/",
     repoUrl: "#",
-    className: "md:col-span-2",
   },
   {
-    title: "Plataforma E-commerce",
+    title: "AutoNegocie",
     description:
-      "Uma loja online completa construída com Next.js, Supabase e integração Stripe.",
-    tags: ["Next.js", "Supabase", "Stripe", "TailwindCSS"],
-    demoUrl: "#",
+      "A melhor plataforma de negociação de veículos. Revolucionando a maneira como as pessoas compram e vendem veículos com eficiência e segurança.",
+    tags: ["Next.js", "React", "TypeScript", "TailwindCSS", "Sanity"],
+    demoUrl: "https://www.autonegocie.com.br/",
     repoUrl: "#",
-    className: "md:col-span-1",
   },
 ];
 
@@ -64,11 +62,10 @@ export function Projects() {
               </motion.p>
             </div>
           </div>
-          <div className="mx-auto grid max-w-5xl grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="mx-auto grid max-w-5xl grid-cols-1 md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
               <motion.div
                 key={project.title}
-                className={project.className}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -100,7 +97,7 @@ export function Projects() {
                         asChild
                         size="sm"
                         variant="outline"
-                        className="flex-1"
+                        className="w-full"
                       >
                         <Link
                           href={project.demoUrl}
@@ -109,18 +106,6 @@ export function Projects() {
                         >
                           <ExternalLink className="mr-2 h-4 w-4" />
                           Visitar Site
-                        </Link>
-                      </Button>
-                      <Button
-                        asChild
-                        size="sm"
-                        variant="ghost"
-                        className="flex-1"
-                        disabled={project.repoUrl === "#"}
-                      >
-                        <Link href={project.repoUrl}>
-                          <Github className="mr-2 h-4 w-4" />
-                          Código
                         </Link>
                       </Button>
                     </div>

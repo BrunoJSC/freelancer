@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Code2, Lightbulb, Rocket } from "lucide-react";
+import { CheckCircle2, Lightbulb, Rocket } from "lucide-react";
 import * as motion from "motion/react-client";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Separator } from "./ui/separator";
@@ -14,21 +14,14 @@ const steps = [
     color: "text-yellow-500",
   },
   {
-    title: "2. Design & Planejamento",
-    description:
-      "Crio protótipos e defino a arquitetura técnica para garantir uma base sólida.",
-    icon: Code2,
-    color: "text-blue-500",
-  },
-  {
-    title: "3. Desenvolvimento",
+    title: "2. Desenvolvimento",
     description:
       "Codifico sua solução usando as melhores práticas de performance e segurança.",
     icon: CheckCircle2,
     color: "text-green-500",
   },
   {
-    title: "4. Lançamento & Suporte",
+    title: "3. Lançamento & Suporte",
     description:
       "Coloco seu projeto no ar e ofereço suporte contínuo para garantir o sucesso.",
     icon: Rocket,
@@ -65,7 +58,7 @@ export function Process() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {steps.map((step, index) => {
               const Icon = step.icon;
               return (
